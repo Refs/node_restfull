@@ -96,7 +96,7 @@ nodemon server.js
 
 > 即我们不需要去全局的安装nodemon 就可以利用npm  指令去全局的使用nodemon, 了解这个使用的方式；
 
-* 安装 morgan package
+* 安装 morgan package --- logger middleware
 
 >  it's a logging package for node.js we can use it really easy 
 
@@ -108,5 +108,35 @@ nodemon server.js
 ## Course 5 Parsing the Body & Handing CORS 
 
 ### how we can extract the request body of an incoming request like let's say for a post request 
+
+> doc 文档： https://www.npmjs.com/package/body-parser
+
+```bash
+npm install --save body-parser
+
+# body-parser does not support files for example but it does support URL encoded bosies and it also supports json data .
+# so if we receive a post request that comtains json data, we can use this middleware to parser data;
+
+```
+
+```js
+// app.js 中
+
+const bodyParser = require('body-parser');
+
+/**
+* apply the middleware to erery incoming requests
+*
+*/
+// the bosyParser middleware need some additional information which kind of bodies do you want to parse first I want to parse the URL encoded bodies
+// we can set extened to either true ro false , true allows you to parse extended bodies with rich data in it ; and dlase to only simple bodies for URL encoded data 
+app.use(bodyParser.urlencoded({extended: true}));
+
+// this will now extract JSON data and makes it easily to us 
+app.use(bodyParser.json());
+
+
+
+```
 
 ### how we can handle a cors errors 
