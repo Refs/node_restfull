@@ -104,3 +104,9 @@ nodemon server.js
 
 
 *  错误的处理方式： 见代码
+
+## Course 5 Parsing the Body & Handing CORS 
+
+### how we can extract the request body of an incoming request like let's say for a post request 
+
+### how we can handle a cors errors 
