@@ -166,6 +166,19 @@ app.use(bodyParser.json());
   'movie[poster]': 'http://r3.ykimg.com/05160000530EEB63675839160D0B79D5'
 }
 
+// 既然选择了远方，便只顾风雨兼程；
 ```
 
+
+
+
 ### how we can handle a cors errors 
+
+* 为什么我们使用postman不会面临跨域的问题，而使用浏览器则会面临跨域的问题： 跨域问题是浏览器的安全策略，如在不改动服务器的前提下，在浏览器上面安装一个插件，就可以实现跨域；
+
+> as the default the browser is saying it doesn't make sense(明智的) for you to get something from that server which is not the server you html page coming from . that is a security concept , but for restfull api , we want allow this , because restfull api are meant to be consumed by by our clients by orservers and not just the server which is the api runs on   
+
+> we don't server an application from that api, we just server data, therefore we can overcome this we can disable this Cors mechanism by sending some headers `from server` to the client that essentially tell the browser which is running our client application which tell the client : "yeah! it is okay you can have access and then thw browser says "okay ! so here ylu go "
+
+> so waht we have to do now is we have to ensure 
+
