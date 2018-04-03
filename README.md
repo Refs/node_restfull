@@ -135,7 +135,36 @@ app.use(bodyParser.urlencoded({extended: true}));
 // this will now extract JSON data and makes it easily to us 
 app.use(bodyParser.json());
 
+```
 
+* bodyParser.json() 与 bodyParser.urlencoded() 的区别与联系
+  + The bodyParser object exposes various factories to create middlewares. 也就是上述两者，都是bodyParser的中间件工厂方法，都会返回一个中间件
+  + bodyParser.urlencoded() 接受form请求，bodyParser.json() 接受json请求
+  + options可选 ， 这个方法返回一个仅仅用来解析json格式的中间件。这个中间件能接受任何body中任何Unicode编码的字符。支持自动的解析gzip和 zlib。
+  + bodyParser.urlencoded(options) options可选，这个方法也返回一个中间件，这个中间件用来解析body中的urlencoded字符， 只支持utf-8的编码的字符。同样也支持自动的解析gzip和 zlib。
+
+*  bodyParser.urlencoded({ extended: true }) 与 bodyParser.urlencoded({ extended: false })的区别：
+
+```js
+// bodyParser.urlencoded({ extended: true })的解析结果
+
+{ 
+   movie: { 
+     _id: 'undefined',
+     title: '电影名称11121',
+     poster: 'http://r3.ykimg.com/05160000530EEB63675839160D0B79D5'
+   } 
+}
+
+```
+
+```js
+// bodyParser.urlencoded({ extended: false }) 的解析结果
+{ 
+  'movie[_id]': 'undefined',
+  'movie[title]': '电影名称11121',
+  'movie[poster]': 'http://r3.ykimg.com/05160000530EEB63675839160D0B79D5'
+}
 
 ```
 
