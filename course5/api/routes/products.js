@@ -22,8 +22,15 @@ router.get('/',(req, res, next) => {
     })
 })
 router.post('/',(req, res, next) => {
-    res.status(200).json({
-        message: 'Handing POST requests to /products'
+
+    const product = {
+        name: req.body.name,
+        price: req.body.price
+    }
+    // 新建的状态码一般是201
+    res.status(201).json({
+        message: 'Handing POST requests to /products',
+        createdProduct: product
     })
 })
 
