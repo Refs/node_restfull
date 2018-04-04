@@ -174,11 +174,66 @@ app.use(bodyParser.json());
 
 ### how we can handle a cors errors 
 
+MDN参考文档：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS
+
+
 * 为什么我们使用postman不会面临跨域的问题，而使用浏览器则会面临跨域的问题： 跨域问题是浏览器的安全策略，如在不改动服务器的前提下，在浏览器上面安装一个插件，就可以实现跨域；
 
 > as the default the browser is saying it doesn't make sense(明智的) for you to get something from that server which is not the server you html page coming from . that is a security concept , but for restfull api , we want allow this , because restfull api are meant to be consumed by by our clients by orservers and not just the server which is the api runs on   
 
 > we don't server an application from that api, we just server data, therefore we can overcome this we can disable this Cors mechanism by sending some headers `from server` to the client that essentially tell the browser which is running our client application which tell the client : "yeah! it is okay you can have access and then thw browser says "okay ! so here ylu go "
 
-> so waht we have to do now is we have to ensure 
+> so waht we have to do now is we have to ensure that we send the right headers back and 
+
+> to append the headers to any response we sent back; we should do it before the request reach the routes , because routes will sent back a ronsponse. so before the toute we'll add another a middleware weith app.use() to funnel every request through it  
+
+```js
+app.use((req, res, next) => {
+  // here we want to add some headers to the response, this will not send the response, it will just adjust the response . wherever we do send a response it has these headers .
+
+  // the second parameter :  the value can be start to give access to any origin , you could also restrict it you could say only 'httpL//my-cool-page.com' should have access but typically for restfull api as you give access to any client, because you really want to narrow it down to one 
+  // res.header('Access-Control-Allow-Origin', 'htpp://my-cool-page.com')
+  res.header('Access-Control-Allow-Origin', '*');
+
+  // define which kind of headers we want to accept ,  
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requstted-With, Content-Type, Accept, Authorization');
+
+  //  browser will always send an options request first when you send a post request or a put request this is basically somthing you can't avoid where the browser sees if you can make this request  用于接收浏览器的预检请求
+  if (req.method === 'OPTIONS') {
+
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH,DELETE');
+
+    // here I don't need to go to routes because the OPTIONS request is just for finding out which options have and by sending back a response
+
+    //  即 对于OPTIONS的请求，我们提前让其返回，而对于普通的请求，我们直接让其进入到路由；
+    // 对于不满足要求的路由的非OPTIONS的路由，其悠久会进入到ROutes, 同样会获取数据，只不过我们的浏览器会将数据拦截，使其不返回给请求的源；
+    return res.status(200).json({});
+  }
+
+  next();
+
+})
+
+```
+
+
+> https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS
+
+* 跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站有权限访问哪些资源。
+
+* 对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。 
+* Access-Control-Allow-Origin: *  表明，该资源可以被任意外域访问。
+
+* Access-Control-Allow-Origin: http://foo.example 除了 http://foo.example，其它外域均不能访问该资源
+
+* Access-Control-Allow-Methods 首部字段用于预检请求的响应。其指明了实际请求所允许使用的 HTTP 方法。
+
+
+* Access-Control-Allow-Headers 首部字段用于预检请求的响应。其指明了实际请求中允许携带的首部字段。
+
+### 为什么我们在使用postman的时候，不会有跨域的问题
+
+postman is just a testing tool ,and it's not a browser. kepp in mind that CORS are a security mechanism and forced by browser that's why you can override them with headers the berowser then know to ignore it .
+post doesn't care CORS , it just care for testing 
+
 
