@@ -2,9 +2,20 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const dbPath = 'mongodb://localhost:27017/node-shop';
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes =  require('./api/routes/orders');
+
+mongoose.connect(dbPath);
+
+
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//   console.log('It Open!')
+// });
 
 /**
  * use the log middleware -- morgan

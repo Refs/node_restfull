@@ -1,5 +1,10 @@
-const express = require('express');
-const router = express.Router();
+var express = require('express');
+var router = express.Router();
+var mongoose = require('mongoose');
+var ProductModel = require('../models/product.model.server');
+
+
+mongoose.Promise = global.Promise;
 
 // router.use(
 //     (req, res, next) => {
@@ -23,15 +28,19 @@ router.get('/',(req, res, next) => {
 })
 router.post('/',(req, res, next) => {
 
-    const product = {
+    const product = new Product({
+        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price
-    }
-    // 新建的状态码一般是201
-    res.status(201).json({
-        message: 'Handing POST requests to /products',
-        createdProduct: product
     })
+
+    ProductModel.createProduct(product).then(
+        () => {
+            console.log('数据已经存储进去了')
+        }
+    )
+
+
 })
 
 router.get('/:productID',(req,res,next)=>{
