@@ -17,6 +17,7 @@ const router = express.Router();
 */
 
 router.get('/',(req, res, next) => {
+    debugger;
     res.status(200).json({
         message: 'Handing GET requests to /products'
     })
