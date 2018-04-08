@@ -22,9 +22,17 @@ mongoose.Promise = global.Promise;
 */
 
 router.get('/',(req, res, next) => {
-    res.status(200).json({
-        message: 'Handing GET requests to /products'
-    })
+    ProductModel.findAllProducts().then(
+        (value) => {
+            res.status(200).json(value);
+        }
+    )
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+    });
 })
 router.post('/',(req, res, next) => {
 
@@ -36,32 +44,67 @@ router.post('/',(req, res, next) => {
 
     ProductModel.createProduct(product).then(
         () => {
-            console.log('数据已经存储进去了')
+            console.log('数据已经存储进去了');
+            return ProductModel.findAllProducts()
+        }
+    ).then(
+        (value) => {
+            res.status(200).json(value);
         }
     )
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+    });
 
 
 })
 
 router.get('/:productID',(req,res,next)=>{
     const id = req.params.productID;
-    if (id === 'special') {
-        res.status(200).json({
-            message: 'you discover the special ID',
-            id: id
-        })
-    } else {
-        res.status(200).json({
-            message: 'you pass an ID',
-            id: id
-        })
-    }
+    ProductModel.findProductById(id)
+        .then(
+            (value) => {
+                if (value) {
+                    res.status(200).json(value);
+                } else {
+                    res
+                        .status(404)
+                        .json({
+                            message: 'No valid entry found for provided ID'
+                        })
+                }
+            }
+        )
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+              error: err
+            });
+        });
 })
 
 router.patch('/:productId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Updated product!'
-    });
+    const productId = req.params.productId;
+    const updateOps = {};
+    for (let ops in req.body) {
+        updateOps[ops] = req.body[ops];
+    }
+    ProductModel.updateProductById(productId, updateOps )
+        .then(
+            (result) => {
+                console.log(result);
+                res.status(201).json(result);
+            }
+        )
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+              error: err
+            });
+        });
 });
 
 router.delete('/:productId', (req, res, next) => {
