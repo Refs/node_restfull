@@ -49,11 +49,11 @@ app.use((req,res,next)=>{
 })
 
 
-// app.use('/products', productRoutes);
-app.use('/products', (req, res)=>{
-    console.log('123');
-    res.send('123');
-});
+app.use('/products', productRoutes);
+// app.use('/products', (req, res)=>{
+//     console.log('123');
+//     res.send('123');
+// });
 // app.use('/orders', orderRoutes);
 app.use('/orders', orderRoutes);
 
