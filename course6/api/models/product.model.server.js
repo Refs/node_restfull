@@ -22,10 +22,17 @@ function updateProductById(productId, productConfig) {
     )
 }
 
+function deleteProductById(productId) {
+    return ProductModel.remove({
+        _id: productId
+    })
+}
+
 ProductModel.createProduct = createProduct;
 ProductModel.findAllProducts = findAllProducts;
 ProductModel.findProductById = findProductById;
 ProductModel.updateProductById = updateProductById;
+ProductModel.deleteProductById = deleteProductById;
 
 module.exports = ProductModel;
 
