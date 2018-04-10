@@ -4,18 +4,28 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-     {
-         "type": "node",
-         "request": "launch",
-         "name": "Launch Program",
-         "program": "${file}",
-         "cwd": "${workspaceFolder}",
-         "skipFiles": [
-            "${workspaceFolder}/**/node_modules/**/*.js",
-            "<node_internals>/**/*.js"
-          ]
-     },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach",
+            "port": 9229,
+            "restart": true,
+            "skipFiles": [
+                "${workspaceFolder}/**/node_modules/**/*.js",
+                "<node_internals>/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "skipFiles": [
+                "${workspaceFolder}/**/node_modules/**/*.js",
+                "<node_internals>/**/*.js"
+            ]
+        },
         {
             "type": "node",
             "request": "launch",
