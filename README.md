@@ -355,3 +355,25 @@ router.post("/", (req, res, next) => {
 ```
 
 > It's something you should always keep in mind though you create descriptive apis, if  you plan on using them publicly , if you want to create an API that is used by other people you should clear about how to use it and do that by using like ablove 
+
+## Course8 Managing Orders with Mongoose
+
+> the interesting part here is that orders are connected to products 
+
+```js
+// /api/models/order.js 中
+
+const mongoose = require('mongoose');
+
+const orderSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    // the type here will acturally also be an ObjectId, because we will store the ID of the product which is related to this order .  now there is something important we are nwe creating like a relation and MongoDB is a non realtional database you can build these relations as we're about to do that and that is okay to some degree . but if you find yourself building a lot of relations and sticking very much in that sql database world then you might indeed wanna pick a sequel database .
+
+    // the key word ref : you need to use ref here to configure this type  and ref should hold a string with the name of the model you want to connenct...| here we want to connect this schema with my product and with that we store order where we ordered this product 
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    quantity: { type: Number, default: 1 }
+});
+
+module.exports = mongoose.model('Order', orderSchema);
+
+```
