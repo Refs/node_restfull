@@ -237,3 +237,120 @@ postman is just a testing tool ,and it's not a browser. kepp in mind that CORS a
 post doesn't care CORS , it just care for testing 
 
 
+## course6 MongoDB and Mongoose
+
+
+
+## course7 Mongoose Validation and Better Response
+
+
+```js
+
+var productSchema = new ProductSchema({
+    _id: mongoose.Schema.Types.ObjectId,
+    name: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    }
+})
+
+
+```
+
+### 如果 我们的post数据的时候，除了给出必须的name与price , 还额外给出一个sales 的值， mongoose会怎么去操作？
+
+* just sending the sales price as an argument to our route doesn't do anything  because here we are configuring the product we plan on storing and there we never extract the sales price we . we never assign it to a property in our object which is going to get stored 
+
+### 优化response
+
+* current response doesn't fulfill the constrains we mentioned earlier that the response should be all kind of self-destructive . so what we want to do is provide better responses
+
+* `不想仅得到一个_id，向得到一个直接有_id 拼接号的url`:  当我们发送一个get请求的时候，我们会得到一个对象，对象中包含一个_id的属性，we can take the _id and appended at the end of the URL to get the object which is the _id refer.  but this is not necessarily when you are newcomer to this API. so It would be nicer if we would provide a link which you could then programmatically fetch to send another request to it 
+
+* `得到一些除数据库真是返回的其它的东西` maybe we want to send（从server 向client send） some metadata like the amount of items we fetched so  we don't want to just return the docs here as the response . we want to return more
+
+* It would be interesting to have more information on the individual rpoduct like the URL that leads us to the detail information for that product 
+
+* the below code is how we should style our response and how we should structure our response . that is a better response for getting all the docs and od course you can find you just totally to your needs 
+
+```js
+router.get("/", (req, res, next) => {
+  Product.find()
+    .select("name price _id")
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        products: docs.map(doc => {
+          return {
+            name: doc.name,
+            price: doc.price,
+            _id: doc._id,
+
+            // the request is just meta information you can write this in whichever way you want pass whichever information you want . in this condition we want to pass information about which kind of requests do you have to send to which URL to get more information about this object 
+            request: {
+              type: "GET",
+              url: "http://localhost:3000/products/" + doc._id
+            }
+          };
+        })
+      };
+      //   if (docs.length >= 0) {
+      res.status(200).json(response);
+      //   } else {
+      //       res.status(404).json({
+      //           message: 'No entries found'
+      //       });
+      //   }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+
+```
+
+
+```js
+
+router.post("/", (req, res, next) => {
+  const product = new Product({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    price: req.body.price
+  });
+  product
+    .save()
+    .then(result => {
+      console.log(result);
+      res.status(201).json({
+        message: "Created product successfully",
+        createdProduct: {
+            name: result.name,
+            price: result.price,
+            _id: result._id,
+            request: {
+                type: 'GET',
+                url: "http://localhost:3000/products/" + result._id
+            }
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+```
+
