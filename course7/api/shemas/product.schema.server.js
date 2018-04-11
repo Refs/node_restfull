@@ -4,8 +4,8 @@ var ProductSchema = mongoose.Schema;
 
 var productSchema = new ProductSchema({
     _id: mongoose.Schema.Types.ObjectId,
-    name: { type: String, required: true},
-    price: { type: Number, required: true}
+    name: String,
+    price: Number
 })
 
 
