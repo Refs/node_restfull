@@ -377,3 +377,52 @@ const orderSchema = mongoose.Schema({
 module.exports = mongoose.model('Order', orderSchema);
 
 ```
+
+```js
+router.post("/", (req, res, next) => {
+  Product.findById(req.body.productId)
+    .then(product => {
+      // 此处之所以要进行判别是因为，若mongodb依据检索的条件，找不到对应doc, 其不会去报错，只会给一个null; 即不会跑到catch error中
+      // 而我们要实现的就是，若_id 对应的product 不存在，就不让order生成，所以此处应将其处理一下。 让其直接return;
+
+      // Itworks but can't store orders for products we don't have which of course is very useful 
+      if (!product) {
+        return res.status(404).json({
+          message: "Product not found"
+        });
+      }
+      const order = new Order({
+        _id: mongoose.Types.ObjectId(),
+        quantity: req.body.quantity,
+        product: req.body.productId
+      });
+      return order.save();
+    })
+    .then(result => {
+      console.log(result);
+      res.status(201).json({
+        message: "Order stored",
+        createdOrder: {
+          _id: result._id,
+          product: result.product,
+          quantity: result.quantity
+        },
+        request: {
+          type: "GET",
+          url: "http://localhost:3000/orders/" + result._id
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+```
+
+> 上面讲的内容有一点要注意，就是当mongodb 依据指定的条件，搜索不到对应的doc时，其不会去报错，而只会返回一个null ，而此时我们要做一个判断处理。 因为大多说的时候，我们将`未找到 ` 当成一种错误进行处理；
+
+
