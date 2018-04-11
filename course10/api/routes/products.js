@@ -2,24 +2,25 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var ProductModel = require('../models/product.model.server');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/');
+      },
+      
+      filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + file.originalname)
+      }
+})
+
+var upload = multer({
+    storage: storage
+});
 
 
 mongoose.Promise = global.Promise;
 
-// router.use(
-//     (req, res, next) => {
-//         res.status(200).json({
-//         message: "Product Router works!"
-//         })
-//     }
-// )
-
-/**
- * A router object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.
- * 
- * 1. router 仅用来 挂在中间件，将匹配的请求，路由到某个函数中；
- * 2. app  之所以可以挂在路由或路由function 是因为其内置一个router; 
- */
 
 router.get('/', (req, res, next) => {
     ProductModel.findAllProducts().select("name price _id").then(
@@ -51,8 +52,8 @@ router.get('/', (req, res, next) => {
             });
         });
 })
-router.post('/', (req, res, next) => {
-
+router.post('/', upload.single('productImage'), (req, res, next) => {
+    
     const product = new ProductModel({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,

@@ -430,5 +430,86 @@ router.post("/", (req, res, next) => {
 
 Populated paths are no longer set to their original _id , their value is replaced with the mongoose document returned from the database by performing a separate query before returning the results.
 
+## Course10 Uploading an Image
+
+> how can we accept and files 
+
+> let's implement file uploading and let's say we want to do this foe products ; For posting a new product it might make sense to be able to accept an image which would store on our server and we also store an entry in the database with the location that stored image so that we can sent it back with a get request . so when we get all products  
 
 
+### accept images in the post route --  利用multer
+
+> there are two different approaches you could take here.  the first approach is that you build an additional end point where  you accept binary data only so you don't try to get request body , because the body isn't available, because the binary body won't be parsed by our body-parser package , since it only parses URL encoded or JSON bodies instead we could read out the raw body ;
+
+> we will get a request body here which is coming frome our body-parser plugin which parses the incoming JSON body . new if we accept a different kind of body namely form data to be precise multi-part form data 
+
+> to be able to read incoming requests which hold form data , we will need a plugin -- multer
+
+```js
+
+router.post('/', (req, res, next) => {
+
+    const product = new ProductModel({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        price: req.body.price
+    })
+
+    ProductModel.createProduct(product).then(
+            (result) => {
+                res.status(201).json({
+                    message: "Created product successfully",
+                    createdProduct: {
+                        name: result.name,
+                        price: result.price,
+                        _id: result._id,
+                         request: {
+                            type: "GET",
+                            url: "http://127.0.0.1:3000/products/" + result._id
+                        }
+                    }
+                });
+            }
+        )
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+
+
+})
+
+```
+
+### 利用multer 我们可以很方便的将上传的文件存储到服务器上面，但是我们如何去获取我们已经存储的文件；
+
+> we store the files on our backend that's nice , but we also want to store an entry in the database so that we we get a list of all the files we can access them 
+*  我们的在存储product 的时候，应该在product 的schema上面去添加一个字段，用来存放图片的url地址；
+
+```js
+const mongoose = require('mongoose');
+
+const productSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+
+
+    productImage: { type: String, required: true }
+});
+
+module.exports = mongoose.model('Product', productSchema);
+
+```
+
+* 当我们在浏览器上访问http://127.0.0.1:3000/uploads/dfasdfa.png 的时候，我们访问不到任何东西
+
+>  这是因为我们uploads 目录没有被 node 服务器托管； 即node上面没有处理到 /uploads/dxxx.png 的路由
+
+```js
+
+app.use('/uploads',express.static('uploads'));
+
+```
