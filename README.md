@@ -426,3 +426,9 @@ router.post("/", (req, res, next) => {
 > 上面讲的内容有一点要注意，就是当mongodb 依据指定的条件，搜索不到对应的doc时，其不会去报错，而只会返回一个null ，而此时我们要做一个判断处理。 因为大多说的时候，我们将`未找到 ` 当成一种错误进行处理；
 
 
+## Course9 Populating Queries with Mongoose
+
+Populated paths are no longer set to their original _id , their value is replaced with the mongoose document returned from the database by performing a separate query before returning the results.
+
+
+

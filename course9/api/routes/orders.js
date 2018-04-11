@@ -9,6 +9,7 @@ router.get('/', (req, res, next) => {
     OrderModel
         .findAllOrder()
         .select("productId quantity _id")
+        .populate('productId','name price')
         .then(
             docs =>{
                 res.status(200).json({
@@ -92,6 +93,7 @@ router.get('/:orderId', (req, res, next) => {
     var orderId = req.params.orderId;
 
     OrderModel.findOrderById(orderId)
+        .populate('productId')
         .then(
             order => {
                 if (! order) {
