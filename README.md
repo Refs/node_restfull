@@ -516,6 +516,9 @@ app.use('/uploads',express.static('uploads'));
 
 
 
+
+
+
 ## 实际项目中的的应用是像请求mongodb服务器一样去请求，本公司的java服务器。 java 服务帮自己去查询与返回mysql 中的数据；  node 负责前端的登陆验证与数据的返回；
 
 client --> nginx 返回静态资源  ---> node mongodb 数据  --> java mysql数据
@@ -525,4 +528,4 @@ client --> nginx 返回静态资源  ---> node mongodb 数据  --> java mysql数
 
 利用上述的逻辑，不管自己是否使用的是单页面程序，都可以做到前后端的分离； 后台java 同样只需要去提供相应的数据即可； 如自己去开发app 完全可以用自己的node去搭建，当自己需要某些关键的数据的时候，就去请求java 向其去要  即可；  按照这个逻辑，就可以将node 的技术 去应用到当前的项目中；
 
-自己是一个完全与后端分离的前端；
+`自己是一个完全与后端分离的前端；`
