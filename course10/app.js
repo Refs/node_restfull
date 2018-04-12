@@ -22,6 +22,9 @@ db.once('open', function() {
 */
 app.use(morgan('dev'));
 
+
+app.use('/uploads',express.static('./uploads/'))
+
 /**
  * use the body-parser middleware
  * Content-Type 内容类型，用于定义网络文件的类型和网页的编码，决定浏览器将以什么形式、什么编码读取这个文件（浏览器会据此决定如何去显示返回的内容）
