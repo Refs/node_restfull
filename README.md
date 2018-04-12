@@ -514,6 +514,45 @@ app.use('/uploads',express.static('uploads'));
 
 ```
 
+## Course11 Adding User Signup 
+
+> 可以多听几遍，讲的不错
+
+> To start adding authentication so that we can ensure that certain resource on our server are only availabel to users who are logged in .
+
+> one important question will be how we acturally implement authentication in a restful service , because it's different to your normal node.js application you might have written 
+
+> let's start by understanding how authentication works  in a restful service as we are building it; client that connect to a back-end to have a data layer to be able to store data and fetch data ;
+
+> client is going to send some Auth data which is always email and password to the server .  on the server if we're signing up, we can then store this data in the database by hashing the password and storing it and so on , or if the user is logging in because you already did sign up in the past then we would simply check values on the server so we would verify if the user who's sending Auth data actrually has a valid account for this given data on our page , so this is what we do on the server 
+
+> then we return something. in a normal node app that would a session but in a restful service it can't be a seddion because remember restful services are stateless they don't save any information about connected clients at least not like this . we dont care about whether a mobile app or a web app connected therefore we don't use sessions and we also can't use sessions because some clients might not even support the idea behind sessions say a mobile app might not support a session
+
+> we're not connenting througn a session, instead what we do is we will actrully returned a token . a token essentially will be some object which is some piece of data that will actrually contain some signature so that we verify on the server . 
+
+> when the client recieve token , token then can be stored by our client , and can be attached to futrue requests so that whenever we in the futrue try to access something on the server which we want to protect we 
+
+
+### What's that Token? 
+
+
+### implement jwt authentication
+
+* 新建一个用户user model 用来描述要登陆的用户，应该是什么样子的
+
+* 存储的过程中我需要用到一个node.bcrypt.js 的插件来 hash 我们接收到的用户密码；
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -529,3 +568,9 @@ client --> nginx 返回静态资源  ---> node mongodb 数据  --> java mysql数
 利用上述的逻辑，不管自己是否使用的是单页面程序，都可以做到前后端的分离； 后台java 同样只需要去提供相应的数据即可； 如自己去开发app 完全可以用自己的node去搭建，当自己需要某些关键的数据的时候，就去请求java 向其去要  即可；  按照这个逻辑，就可以将node 的技术 去应用到当前的项目中；
 
 `自己是一个完全与后端分离的前端；`
+
+
+这次研究的是 node与前台的交流， 再学习一下node 与后台的交流 自己的node 就可以暂时的满足需求了；
+
+
+利用pm2 同一台服务器上面，可以部署多个node 服务，而每个服务去单独的控制一个应用；
