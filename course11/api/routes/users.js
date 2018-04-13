@@ -2,6 +2,8 @@ var express = require('express');
 var mongoose =  require('mongoose');
 var router = express.Router();
 var UserModel = require('../models/user.model.server');
+
+
 mongoose.Promise = global.Promise;
 
 
@@ -14,7 +16,7 @@ router.post('/signup', (req,res,next)=> {
             if(user){
                 res.status(409)
                     .json({
-                        
+
                     })
             }
         }
