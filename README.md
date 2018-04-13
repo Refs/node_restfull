@@ -542,6 +542,50 @@ app.use('/uploads',express.static('uploads'));
 
 * 存储的过程中我需要用到一个node.bcrypt.js 的插件来 hash 我们接收到的用户密码；
 
+* 存储用户的过程中，应该做一下判别，是否数据库中已经存在相同的用户名 
+
+> there's one issue if we are to send the same request against then the user is created again . so now we created two users with the same email address . we want to ensure we only have a user with an email address once in our database
+> we need to check if the given email address is still a whale in our sign up route . so before we hash a password and try to store the user . 我们应该去查询一下数据库；若查询成功且返回的user 存在； 这个时候我们可以返回409 422
+
+> 409 which means confilct we got the request ,we could handle it but we got a confilct with the resource we already have 
+> 422 which means unprocess ablout entity , we coulf theoreticlly read ,we understand the request but we can't process it 
+
+* 判别user 是否存在的时候上去使用 user.length >= 1; 而不是直接用null, mogodb 查询返回的是一个数组
+
+
+* 将user model的 email 字段配置为unique; 有一个混淆的地方；
+
+* 为user model 增加一个 match 验证
+
+
+```js
+const mongoose = require('mongoose');
+
+const userSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    email: { 
+        type: String, 
+        required: true, 
+        // we check if a user email exists before we try to create a new user one more thing we should do is we should do back to the user model  and for the email i'll add another configuration which is unique which are also set true ;
+
+        //  that(将字段设为unique) can be really deceiving and trange, because you could expect that by setting unique , you can bassically save the code here you don't need to check wether an emial address exists or not because it's some form of valisation just as required ensures 
+
+        // unique doesn's add any validation on purpose instead unique simply optimizes this field you could to searched and to be indexed it can do some performance optimizations by konwing that there will be  only one of these values in this filed and that of course is helpful to us but it will not validate the values 
+
+        // 即将字段 配置成 unique ， 不会在我们存储的时候，进行验证是否唯一，而只会去告诉mongodb 对于不同doc  之间的  email值是不同的，这样有利于搜索的优化； 
+
+        unique: true, 
+
+
+        // you can match that incoming string to a given pattern to ensure that what we are storing is an email address 
+        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    },
+    password: { type: String, required: true }
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+```
 
 
 
