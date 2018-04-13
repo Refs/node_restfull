@@ -542,6 +542,10 @@ app.use('/uploads',express.static('uploads'));
 
 * 存储的过程中我需要用到一个node.bcrypt.js 的插件来 hash 我们接收到的用户密码；
 
+> bcrypt 的安装并不是仅仅通过一句 npm install -s bcrypt 就可以完成的，参阅一下官方的安装教程：https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions#microsoft-windows 
+
+> 安装好依赖之后，记得去重启一下系统；
+
 * 存储用户的过程中，应该做一下判别，是否数据库中已经存在相同的用户名 
 
 > there's one issue if we are to send the same request against then the user is created again . so now we created two users with the same email address . we want to ensure we only have a user with an email address once in our database

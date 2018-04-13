@@ -16,17 +16,8 @@ function hashPassword ( password ) {
     return bcrypt.hash( password , 10 )
 }
 
-function createUser (email,password) {
-    UserModel.find({
-        email: email
-    })
-    .then(
-        (user) => {
-            if (user.length >= 1) {
-                return res.status(409).json({})
-            }
-        }
-    )
+function createUser (user) {
+    return UserModel.create(user)
 }
 
 UserModel.findUser = findUser;
