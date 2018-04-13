@@ -7,8 +7,11 @@ const dbPath = 'mongodb://localhost:27017/node-shop';
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes =  require('./api/routes/orders');
+const userRoutes = require('./api/routes/users');
 
 mongoose.connect(dbPath);
+
+mongoose.Promise = global.Promise;
 
 
 var db = mongoose.connection;
@@ -59,6 +62,10 @@ app.use('/products', productRoutes);
 // });
 // app.use('/orders', orderRoutes);
 app.use('/orders', orderRoutes);
+
+// handle the sinup 
+
+app.use('/users', userRoutes)
 
 /**
  * handle the error request
