@@ -1,4 +1,5 @@
 const mongoose =  require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = require("../shemas/user.schema.server");
 
@@ -12,24 +13,25 @@ function findUser ( email ) {
 }
 
 function hashPassword ( password ) {
-    
+    return bcrypt.hash( password , 10 )
 }
 
-// function createUser (email,password) {
-//     UserModel.find({
-//         email: email
-//     })
-//     .then(
-//         (user) => {
-//             if (user.length >= 1) {
-//                 return res.status(409).json({})
-//             }
-//         }
-//     )
-// }
+function createUser (email,password) {
+    UserModel.find({
+        email: email
+    })
+    .then(
+        (user) => {
+            if (user.length >= 1) {
+                return res.status(409).json({})
+            }
+        }
+    )
+}
 
 UserModel.findUser = findUser;
 UserModel.hashPassword = hashPassword;
+UserModel.createUser = createUser;
 
 
 module.exports = UserModel;
