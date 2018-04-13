@@ -21,6 +21,7 @@ router.post('/signup', (req,res,next)=> {
                     // throw new Error('Mail Already Exists', status)  ----> 手动抛错
                     var repeatError = new Error('');
                     repeatError.message = 'Mail Already Exists';
+                    // 利用+ 转化为数字  利用!! 转化为布尔值
                     repeatError.status = +409;
 
                     throw repeatError;
