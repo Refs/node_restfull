@@ -18,7 +18,7 @@ router.post('/signup', (req,res,next)=> {
                     //     });
                     // 此处需要运用 `中断或取消 Promise 链 的技术`，否则 当前的then 执行完毕之后，后续的then 一样会继续执行； 导致node 出现，res 已经返回，不能再修改res的错误；具体看自己的readme文档； 
                     // 此处手动 抛错，直接抛到尾端的额catch() 里面去执行；
-                    // throw new Error('Mail Already Exists', status)
+                    // throw new Error('Mail Already Exists', status)  ----> 手动抛错
                     var repeatError = new Error('');
                     repeatError.message = 'Mail Already Exists';
                     repeatError.status = +409;
