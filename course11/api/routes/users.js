@@ -12,12 +12,19 @@ router.post('/signup', (req,res,next)=> {
         .then(
             (user) => {
                 if (user.length >= 1) {
-                    res.status(409)
-                        .json({
-                            message: "Mail Already Exists"
-                        });
+                    // res.status(409)
+                    //     .json({
+                    //         message: "Mail Already Exists"
+                    //     });
                     // 此处需要运用 `中断或取消 Promise 链 的技术`，否则 当前的then 执行完毕之后，后续的then 一样会继续执行； 导致node 出现，res 已经返回，不能再修改res的错误；具体看自己的readme文档； 
                     // 此处手动 抛错，直接抛到尾端的额catch() 里面去执行；
+                    // throw new Error('Mail Already Exists', status)
+                    var repeatError = new Error('');
+                    repeatError.message = 'Mail Already Exists';
+                    repeatError.status = +409;
+
+                    throw repeatError;
+
                 } else {
                     return UserModel.hashPassword(req.body.password);
                 }
@@ -45,10 +52,17 @@ router.post('/signup', (req,res,next)=> {
         )
         .catch(
             (err) => {
-                res.status(500)
+                if (err.status) {
+                    res.status(err.status)
+                        .json({
+                            message: err.message
+                        })
+                } else {
+                    res.status(500)
                     .json({
                         error: err
                     })
+                }
             }
         )
 
