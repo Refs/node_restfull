@@ -591,6 +591,58 @@ module.exports = mongoose.model('User', userSchema);
 
 ```
 
+### 中断或取消 Promise 链 (手动抛错)
+
+> 更多的需求，看下面的链接：
+
+https://blog.csdn.net/cwzhsi/article/details/51137809
+
+Promise 已经成为了 JavaScript 管理异步操作的重要工具之一. 然而, 有的时候还是会很头痛:
+
+```js
+Promise
+    // 等价于 `Promise.resolve(undefined).then`.
+    .then(() => {
+        // 开始.
+    })
+    .then(() => {
+        if (wantToBreakHere) {
+            // 怎样在这里终止这个 Promise 链?
+        }
+    })
+    .then(() => {
+        // 一定条件下不想被执行的代码.
+    });
+
+```
+
+当然我们可以嵌套后面的 then, 但如果整条链很长很厚, 也必然很痛苦.
+
+不过很多 Promise 实现都有一个 catch 方法, 我们可以做一点点小动作:
+
+```js
+/** 用于中断的信号 */
+class BreakSignal { }
+
+Promise
+    .then(() => {
+        // 开始.
+    })
+    .then(() => {
+        if (wantToBreakHere) {
+            // 抛出中断信号.
+            throw new BreakSignal();
+        }
+    })
+    .then(() => {
+        // 需要跳过的部分.
+    })
+    // 接住中断信号.
+    .catch(BreakSignal, () => { });
+
+```
+
+
 
 
 ### 谈撒盐（salt）加密
