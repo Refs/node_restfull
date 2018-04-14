@@ -11,6 +11,7 @@
 html {
 	background-color: #f3f3f3;
 	color: #656565;
+	
 }
 body {
 	margin-left:auto;
@@ -51,19 +52,29 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-	font-size: 2em;
+	font-size: 1.7em;
+	text-align: left;
 }
 h2 {
-	font-size: 1.6em;
+	font-size: 1.3em;
+	text-align: left;
 }
 h3 {
 	font-size: 1.4em;
+	text-align: left;
+	padding-bottom: 3px;
+	border-bottom: 1px solid gray;
 }
 h4 {
 	font-size: 1.2em;
+	text-align: left;
+
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 h5 {
 	font-size: 1.1em;
+	text-align: left;
 }
 h6 {
 	font-style: italic;
