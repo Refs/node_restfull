@@ -679,12 +679,14 @@ Promise
 
 > to make sure that users can login themselves in and get such a token . the token which we then to attach to futrue requests which reach our protected routes in our sever .
 
-> we don't have protected route yet , we will add these protect later;
+> we don't have protected route yet , we will add these protect later; we'll add token to our protect just as 
 
 
 * bcrypt 的 compare 方法
 
 * 使用 node-jsonwebtoken libarary 去返回一个token ;
+
+>  it's a libarary that will do token generation and signing 
 
 ```js
 // to look at the database and see if we got a fitting user and if we do the actually create sunch token 
