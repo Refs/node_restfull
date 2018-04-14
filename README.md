@@ -675,9 +675,74 @@ Promise
 ![](./images/20171104221111622.gif)
 
 
+## Course 12 Adding User Login 
+
+> to make sure that users can login themselves in and get such a token . the token which we then to attach to futrue requests which reach our protected routes in our sever .
+
+> we don't have protected route yet , we will add these protect later;
 
 
+* bcrypt 的 compare 方法
 
+* 使用 node-jsonwebtoken libarary 去返回一个token ;
+
+```js
+// to look at the database and see if we got a fitting user and if we do the actually create sunch token 
+router.post("/login", (req, res, next) => {
+  User.find({ email: req.body.email })
+    .exec()
+    //  mongodb 查询 返回的结果, find()返回一个对象数组， findone() 返回一个对象；
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          // 此处之所以不写用户名不存在，是出于保护的目的，即不去指明是用户名错误还是密码错误。为了防止攻击；
+          // 只说是用户名或密码错误；
+          message: "Auth failed"
+        });
+      }
+
+      // we basically have some kind of way of comparing values  even though they're hashes won't be the same just by making sure that a plaintext password which we hash again with the same algorithm.  in the end yields us a comparable hash . so this is a check this package can do for us ;  
+
+      // if it basically finds out both passwords were created with the same algorithm , the same key and therefore they are the same passwords even though the hashed don't match 
+
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+        if (result) {
+          const token = jwt.sign(
+            {
+              email: user[0].email,
+              userId: user[0]._id
+            },
+            process.env.JWT_KEY,
+            {
+                expiresIn: "1h"
+            }
+          );
+          return res.status(200).json({
+            message: "Auth successful",
+            token: token
+          });
+        }
+        res.status(401).json({
+          message: "Auth failed"
+        });
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+```
+
+ 
 
 
 
