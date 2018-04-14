@@ -54,6 +54,7 @@ router.post('/signup', (req,res,next)=> {
         .catch(
             (err) => {
                 if (err.status) {
+                    // 接收手动抛出的错误！
                     res.status(err.status)
                         .json({
                             message: err.message
