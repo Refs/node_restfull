@@ -71,6 +71,7 @@ router.post('/signup', (req,res,next)=> {
 })
 
 router.post('/login', (req,res,next) => {
+    let loginUser;
     UserModel.findUser(req.body.email)
         .then(
             (user) => {
@@ -80,6 +81,7 @@ router.post('/login', (req,res,next) => {
                     authFailError.status = +401;
                     throw authFailError;
                 } else {
+                    loginUser = user[0];
                     return UserModel.comparePassword(req.body.password, user[0].password)
                 }
             }
@@ -93,9 +95,13 @@ router.post('/login', (req,res,next) => {
                     throw authFailError;
                 } else {
                     return UserModel.createToken(
+                        // promise 中的每一个链条 都有一个独立的异步函数，每个回调函数都有一个独立的变量作用域。回调函数之间的变量不能共享
+                        // 即user 是上一个回调函数中的变量，不可以写在此处；
+                        // 关键字：如何在Promise链中共享变量？ 
+                        //  https://zhuanlan.zhihu.com/p/29052022
                         {
-                            email: user[0].email,
-                            userId: user[0]._id
+                            email: loginUser.email,
+                            userId: loginUser._id
                         },
                         'sceret',
                         {

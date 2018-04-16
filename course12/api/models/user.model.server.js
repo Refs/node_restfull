@@ -42,6 +42,7 @@ UserModel.findUser = findUser;
 UserModel.hashPassword = hashPassword;
 UserModel.comparePassword = comparePassword;
 UserModel.createUser = createUser;
+UserModel.createToken = createToken;
 
 
 module.exports = UserModel;

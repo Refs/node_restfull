@@ -593,6 +593,8 @@ module.exports = mongoose.model('User', userSchema);
 
 ### 中断或取消 Promise 链 (手动抛错)
 
+* 通过 throw err 抛错；
+
 > 更多的需求，看下面的链接：
 
 https://blog.csdn.net/cwzhsi/article/details/51137809
@@ -642,6 +644,22 @@ Promise
 
 ```
 
+* 通过 Promise.reject() 抛错
+
+```js
+function createToken(payload, secretOrPrivateKey,options) {
+    return new Promise( (resolve, reject) => {
+        jwt.sign(payload, secretOrPrivateKey, options, (err,token) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(token);
+            }
+        })
+    } )
+}
+
+```
 
 
 
@@ -748,7 +766,7 @@ router.post("/login", (req, res, next) => {
  
 
 
-## 在任何一个异步操作中去使用promise
+## （变异步操作为 promise） 在任何一个异步操作中去使用promise
 
 Hey everyone,
 
@@ -761,6 +779,46 @@ CPU intensive async calls (crypto) make use of libuv's event loop to simulate as
 As of now it makes no sense to do so. Once we update to another major we can probably make this change.
 
  > 只要 自己封装好一个promise 即可， 在所调用方法中的回调函数中，让其resolve
+
+
+## 如何在Promise链中共享变量？
+
+> https://zhuanlan.zhihu.com/p/29052022
+
+* 自己用的是 提升变量作用域的方式：
+
+ ```js
+  let connection; // A
+  db.open()
+    .then(conn =>
+    {
+        connection = conn; // D
+        return connection.select(
+        {
+            name: 'Fundebug'
+        });
+    })
+    .then(result =>
+    {
+        connection.query(); // B
+    })
+    .catch(error =>
+    {
+        // ...
+    })
+    .finally(() =>
+    {
+        connection.close(); // C
+    });
+ 
+ ```
+
+
+```js
+
+
+```
+
 
 
 
