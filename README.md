@@ -747,7 +747,19 @@ router.post("/login", (req, res, next) => {
  
 
 
+## 在任何一个异步操作中去使用promise
 
+Hey everyone,
+
+There are different things here.
+
+Returning a promise - I don't think we would want to do that. If we accept callbacks anyone can wrap that in a promise, either using new Promise(function(...){} or something like bluebird's promisifyAll. We like promises (and use them a lot internally) but we don't think it is a good idea to expose them in APIs when they can be so easily wrapped. Some libs also both return a promise and a callback, but that leads to being tied to an implementation of promises which is not always desired.
+Separating into sync/async functions - Crypto functions in jws are not async, so as it was mentioned streaming could be used but it does not make a lot of sense based on the payloads.
+CPU intensive async calls (crypto) make use of libuv's event loop to simulate asynchrony (they are of course working in another thread). We don't have the option to simulate that here. The best choice would probably be to get rid of the callbacks.
+
+As of now it makes no sense to do so. Once we update to another major we can probably make this change.
+
+ > 只要 自己封装好一个promise 即可， 在所调用方法中的回调函数中，让其resolve
 
 
 
