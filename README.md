@@ -673,6 +673,7 @@ Promise
 2. 将用户输入密码和salt值进行散列。 
 3. 判断生成的Hash值是否和数据库中Hash相同。
 ![](./images/20171104221111622.gif)
+4. 登陆成功生成jsonwebtoken , 并将其返回；
 
 
 ## Course 12 Adding User Login 

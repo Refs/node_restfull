@@ -70,4 +70,65 @@ router.post('/signup', (req,res,next)=> {
 
 })
 
+router.post('/login', (req,res,next) => {
+    UserModel.findUser(req.body.email)
+        .then(
+            (user) => {
+                if (user.length < 1) {
+                    var authFailError = new Error('');
+                    authFailError.message = 'Auth Failed';
+                    authFailError.status = +401;
+                    throw authFailError;
+                } else {
+                    return UserModel.comparePassword(req.body.password, user[0].password)
+                }
+            }
+        )
+        .then(
+            (result) => {
+                if (! result) {
+                    var authFailError = new Error('');
+                    authFailError.message = 'Auth Failed';
+                    authFailError.status = +401;
+                    throw authFailError;
+                } else {
+                    return UserModel.createToken(
+                        {
+                            email: user[0].email,
+                            userId: user[0]._id
+                        },
+                        'sceret',
+                        {
+                            expiresIn: "1h"
+                        }
+                    )
+                }
+            }
+        )
+        .then(
+            (token) => {
+                res.status(200)
+                    .json({
+                        message: "Auth successful",
+                        token: token
+                    })
+            }
+        ) 
+        .catch(
+            (err) => {
+                if (err.status) {
+                    res.status(err.status)
+                        .json({
+                            message: err.message
+                        })
+                } else {
+                    res.status(500)
+                    .json({
+                        error: err
+                    })
+                }
+            }
+        )
+})
+
 module.exports = router;
