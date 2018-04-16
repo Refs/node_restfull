@@ -14,6 +14,12 @@ function findUser ( email ) {
     })
 }
 
+function deleteUser ( userId ) {
+    return UserModel.remove({
+        _id: userId
+    })
+}
+
 function hashPassword ( password ) {
     return bcrypt.hash( password , 10 )
 }
@@ -43,6 +49,7 @@ UserModel.hashPassword = hashPassword;
 UserModel.comparePassword = comparePassword;
 UserModel.createUser = createUser;
 UserModel.createToken = createToken;
+UserModel.deleteUser = deleteUser;
 
 
 module.exports = UserModel;
