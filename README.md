@@ -928,6 +928,8 @@ const token = req.headers.authorization.splict(' ')[1];
 
 > 将路由的处理逻辑，单独拿出来，放到controller 文件夹中
 
+
+
 ## 实际项目中的的应用是像请求mongodb服务器一样去请求，本公司的java服务器。 java 服务帮自己去查询与返回mysql 中的数据；  node 负责前端的登陆验证与数据的返回；
 
 client --> nginx 返回静态资源  ---> node mongodb 数据  --> java mysql数据
