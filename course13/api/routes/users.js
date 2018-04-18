@@ -103,7 +103,7 @@ router.post('/login', (req,res,next) => {
                             email: loginUser.email,
                             userId: loginUser._id
                         },
-                        'sceret',
+                        process.env.JWT_KEY,
                         {
                             expiresIn: "1h"
                         }

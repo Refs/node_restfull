@@ -819,7 +819,7 @@ As of now it makes no sense to do so. Once we update to another major we can pro
 
 ```
 
-## Course 13 JWT Route Protection
+## Course 13 JWT Route Protection 主要通过自定义中间件的方式实现的
 
 > we need some way of protecting routes , a good approach would be to add some kind of middleware which we can easily add to a given route that runs prior to that route getting processed , to acturally determine does it make sense to continue . so we need some middleware that checks a valid token to be there and only if the token is there and valid can be verified. on if that we continue  for this we'll create a new folder --- middleware 
 
@@ -834,10 +834,95 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
 
 * 学会自己制作node 中间件
 
+```js
+// api/middleware/check-auth.js 中
 
+const jwt = require('jsonwebtoken');
 
+// It's default middleware pattern we use in Express Apps
+module.exports = (req,res,next) => {
 
+    try{
+        const decoded = jwt.verify(req.body.token, process.env.JWT_KEY); 
+        
+        // 中间件的变量传递，是通过将变量挂载到req res 上面实现的；
+        // so we add a new field(userData) to my request and in the future request , we could extract a userData on the field;   
+        // 将 req上携带的token 处理之后，有重新挂载到req 上面，然后进入到下一个中间件；
+        
+        req.userData = decoded;
 
+        next();
+    } catch (error) {
+        return res.status(401)
+            .json({
+                message: 'Auth failed'
+             });
+    }
+
+    // we have to call next() if we did sucessfully authenticate and we want to not call it , we want to return an error instead if we did not successed .
+
+    // so that we need some information from the JWT package 
+}
+
+```
+
+* 使用中间件 check-auth.js
+
+```js
+const checkAuth = require('./middleware/check-auth')
+
+// Express will automatically pass requests and so on into our middleware checkAuth 
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
+    
+    const product = new ProductModel({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        price: req.body.price,
+        productImage: req.file.path
+    })
+
+    ProductModel.createProduct(product).then(
+            (result) => {
+                res.status(201).json({
+                    message: "Created product successfully",
+                    createdProduct: {
+                        name: result.name,
+                        price: result.price,
+                        _id: result._id,
+                        productImage: result.productImage,
+                        request: {
+                            type: "GET",
+                            url: "http://127.0.0.1:3000/products/" + result._id
+                        }
+                    }
+                });
+            }
+        )
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+})
+
+```
+
+* 客户端发送 token 
+
+![](./images/Bearer_token.png)
+
+a typical pattern is to put the token into the header, so we wil send our token as part of our headers.  there is one common header we use for this the authorization header feild. the authorization feild shold hold information we nedd for authorizing a request and there a token a typically sent by adding `Bearer` + whitesapace + 'token' ;
+
+notice Bearer is simply a convention used to indicate that this is a authorization header ; It's an alternative to basic HTTP authentication so hence bearer 
+
+with  above setup we don't need to parse the body to get the token , we just need to have a look at the header  
+
+```js
+// 因为header 中的 authorization 是 `Bearer dfasdfasdasdf` 的形式，我们利用空格将字符串分割成数组，然后去数组的第二个元素就是我们的token 了；
+const token = req.headers.authorization.splict(' ')[1];
+
+```
 
 
 ## 实际项目中的的应用是像请求mongodb服务器一样去请求，本公司的java服务器。 java 服务帮自己去查询与返回mysql 中的数据；  node 负责前端的登陆验证与数据的返回；
