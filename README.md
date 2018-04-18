@@ -908,7 +908,7 @@ router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
 
 ```
 
-* 客户端发送 token 
+* 客户端发送 token 放到hearder 中， 而不是 组加到 body 里面；
 
 ![](./images/Bearer_token.png)
 
