@@ -766,7 +766,7 @@ router.post("/login", (req, res, next) => {
  
 
 
-## （变异步操作为 promise） 在任何一个异步操作中去使用promise
+### （变异步操作为 promise） 在任何一个异步操作中去使用promise
 
 Hey everyone,
 
@@ -781,7 +781,7 @@ As of now it makes no sense to do so. Once we update to another major we can pro
  > 只要 自己封装好一个promise 即可， 在所调用方法中的回调函数中，让其resolve
 
 
-## 如何在Promise链中共享变量？
+### 如何在Promise链中共享变量？
 
 > https://zhuanlan.zhihu.com/p/29052022
 
@@ -818,6 +818,23 @@ As of now it makes no sense to do so. Once we update to another major we can pro
 
 
 ```
+
+## Course 13 JWT Route Protection
+
+> we need some way of protecting routes , a good approach would be to add some kind of middleware which we can easily add to a given route that runs prior to that route getting processed , to acturally determine does it make sense to continue . so we need some middleware that checks a valid token to be there and only if the token is there and valid can be verified. on if that we continue  for this we'll create a new folder --- middleware 
+
+> `we can add middleware  as many handlers as we want and they will be excuted in the order from left to the right`
+
+```js 
+router.post('/', upload.single('productImage'), (req, res, next) => {
+
+}
+
+``` 
+
+* 学会自己制作node 中间件
+
+
 
 
 
