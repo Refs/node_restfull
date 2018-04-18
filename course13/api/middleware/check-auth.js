@@ -3,7 +3,7 @@ const verifyJWT = require('../services/verify-jwt-service');
 
 module.exports = (req, res, next) => {
 
-    const token = req.headers.Authorization.splict(' ')[1];
+    const token = req.headers.authorization.split(' ')[1];
 
     verifyJWT(token, process.env.JWT_KEY)
         .then(

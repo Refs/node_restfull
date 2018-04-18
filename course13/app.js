@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const dbPath = 'mongodb://localhost:27017/node-shop';
 
+const controlCors = require('./api/middleware/control-cors')
 const productRoutes = require('./api/routes/products');
 const orderRoutes =  require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
@@ -38,21 +39,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 
-app.use((req,res,next)=>{
-    res.header('Allow-Control-Allow-Origin', '*');
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Request-With, Content-Type, Accept, Authorization'
-    )
-    if (req.method === 'OPTIONS') {
-        res.header(
-            'Acess-Control-Allow-Methods',
-            'PUT, POST, PATCH, DELETE, GET'
-        )
-        return res.status(200).json({});
-    };
-    next();
-})
+app.use(controlCors);
 
 
 app.use('/products', productRoutes);

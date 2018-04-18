@@ -2,10 +2,11 @@ var mongoose =  require('mongoose');
 var express = require('express');
 var OrderModel = require('../models/order.model.server');
 var ProductModel = require('../models/product.model.server');
+var checkAuth =  require('../middleware/check-auth')
 var router = express.Router();
 mongoose.Promise = global.Promise;
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     OrderModel
         .findAllOrder()
         .select("productId quantity _id")
@@ -38,7 +39,7 @@ router.get('/', (req, res, next) => {
 
 // 生成订单的时候，需要提供产品的相关信息，包块产品的_id 以及 产品的数量，即发送生成订单的请求的时候，应该去携带这两部分的信息
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth ,  (req, res, next) => {
 
     var productId = req.body.productId;
     var quantity = req.body.quantity;
@@ -87,7 +88,7 @@ router.post('/', (req, res, next) => {
         );
 });
 
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId', checkAuth,  (req, res, next) => {
     var orderId = req.params.orderId;
 
     OrderModel.findOrderById(orderId)
@@ -120,7 +121,7 @@ router.get('/:orderId', (req, res, next) => {
         )
 });
 
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId', checkAuth ,  (req, res, next) => {
     var orderId = req.params.orderId;
 
     OrderModel.deleteOrderById(orderId)
