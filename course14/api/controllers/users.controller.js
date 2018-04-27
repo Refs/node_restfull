@@ -111,7 +111,11 @@ exports.users_user_sinup = (req,res,next)=> {
                 res.status(200)
                     .json({
                         message: "Auth successful",
-                        token: token
+                        token: token,
+                        userData: {
+                            id: loginUser.id,
+                            email: loginUser.email
+                        }
                     })
             }
         ) 

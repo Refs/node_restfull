@@ -514,6 +514,16 @@ app.use('/uploads',express.static('uploads'));
 
 ```
 
+### 学会发送 multer/form-data  类型的请求
+
+* stack overflow:  Tool for sending multipart/form-data request [closed]
+    + https://stackoverflow.com/questions/16015548/tool-for-sending-multipart-form-data-request
+* youtube: Testing file uploads with Postman (multipart/form-data)
+    + https://www.youtube.com/watch?v=c07IsbSNqfI&feature=youtu.be
+
+
+
+
 ## Course11 Adding User Signup  注册的实质就是在数据库中去创建一个user;
 
 > 可以多听几遍，讲的不错
