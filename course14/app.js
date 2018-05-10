@@ -26,6 +26,7 @@ db.once('open', function() {
 */
 app.use(morgan('dev'));
 
+app.use(controlCors);
 
 app.use('/uploads',express.static('./uploads/'))
 
@@ -39,7 +40,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 
-app.use(controlCors);
+
 
 
 app.use('/products', productRoutes);
