@@ -1,8 +1,8 @@
 # node_restfull
 
-## course 1  What is a RESTfull API ?
+## Grade 1  What is a RESTfull API ?
 
-## Course 2 Planing & First Steps
+## Grade 2 Planing & First Steps
 
 ```bash
 npm init
@@ -46,14 +46,14 @@ module.exports = app;
 
 
 
-## Course 3 Adding more Routes to the API
+## Grade 3 Adding more Routes to the API
 
 
 
 
 There is no difference. http.createServer() only does one thing: it calls http.Server() internally and returns the resulting instance.
 
-## Course 4 Handing Error & improving the Project Setup 
+## Grade 4 Handing Error & improving the Project Setup 
 
 
 * 安装nodemon package
@@ -107,7 +107,7 @@ nodemon server.js
 
 
 
-## Course 5 Parsing the Body & Handing CORS 
+## Grade 5 Parsing the Body & Handing CORS 
 
 ### how we can extract the request body of an incoming request like let's say for a post request 
 
@@ -239,11 +239,11 @@ postman is just a testing tool ,and it's not a browser. kepp in mind that CORS a
 post doesn't care CORS , it just care for testing 
 
 
-## course6 MongoDB and Mongoose
+## Grade6 MongoDB and Mongoose
 
 
 
-## course7 Mongoose Validation and Better Response
+## Grade7 Mongoose Validation and Better Response
 
 
 ```js
@@ -277,7 +277,7 @@ var productSchema = new ProductSchema({
 
 * It would be interesting to have more information on the individual rpoduct like the URL that leads us to the detail information for that product 
 
-* the below code is how we should style our response and how we should structure our response . that is a better response for getting all the docs and od course you can find you just totally to your needs 
+* the below code is how we should style our response and how we should structure our response . that is a better response for getting all the docs and od Grade you can find you just totally to your needs 
 
 ```js
 router.get("/", (req, res, next) => {
@@ -358,7 +358,7 @@ router.post("/", (req, res, next) => {
 
 > It's something you should always keep in mind though you create descriptive apis, if  you plan on using them publicly , if you want to create an API that is used by other people you should clear about how to use it and do that by using like ablove 
 
-## Course8 Managing Orders with Mongoose
+## Grade8 Managing Orders with Mongoose
 
 > the interesting part here is that orders are connected to products 
 
@@ -387,7 +387,7 @@ router.post("/", (req, res, next) => {
       // 此处之所以要进行判别是因为，若mongodb依据检索的条件，找不到对应doc, 其不会去报错，只会给一个null; 即不会跑到catch error中
       // 而我们要实现的就是，若_id 对应的product 不存在，就不让order生成，所以此处应将其处理一下。 让其直接return;
 
-      // Itworks but can't store orders for products we don't have which of course is very useful 
+      // Itworks but can't store orders for products we don't have which of Grade is very useful 
       if (!product) {
         return res.status(404).json({
           message: "Product not found"
@@ -428,11 +428,11 @@ router.post("/", (req, res, next) => {
 > 上面讲的内容有一点要注意，就是当mongodb 依据指定的条件，搜索不到对应的doc时，其不会去报错，而只会返回一个null ，而此时我们要做一个判断处理。 因为大多说的时候，我们将`未找到 ` 当成一种错误进行处理；
 
 
-## Course9 Populating Queries with Mongoose
+## Grade9 Populating Queries with Mongoose
 
 Populated paths are no longer set to their original _id , their value is replaced with the mongoose document returned from the database by performing a separate query before returning the results.
 
-## Course10 Uploading an Image
+## Grade10 Uploading an Image
 
 > how can we accept and files 
 
@@ -526,7 +526,7 @@ app.use('/uploads',express.static('uploads'));
 
 
 
-## Course11 Adding User Signup  注册的实质就是在数据库中去创建一个user;
+## Grade11 Adding User Signup  注册的实质就是在数据库中去创建一个user;
 
 > 可以多听几遍，讲的不错
 
@@ -586,7 +586,7 @@ const userSchema = mongoose.Schema({
 
         //  that(将字段设为unique) can be really deceiving and trange, because you could expect that by setting unique , you can bassically save the code here you don't need to check wether an emial address exists or not because it's some form of valisation just as required ensures 
 
-        // unique doesn's add any validation on purpose instead unique simply optimizes this field you could to searched and to be indexed it can do some performance optimizations by konwing that there will be  only one of these values in this filed and that of course is helpful to us but it will not validate the values 
+        // unique doesn's add any validation on purpose instead unique simply optimizes this field you could to searched and to be indexed it can do some performance optimizations by konwing that there will be  only one of these values in this filed and that of Grade is helpful to us but it will not validate the values 
 
         // 即将字段 配置成 unique ， 不会在我们存储的时候，进行验证是否唯一，而只会去告诉mongodb 对于不同doc  之间的  email值是不同的，这样有利于搜索的优化； 
 
@@ -706,7 +706,7 @@ function createToken(payload, secretOrPrivateKey,options) {
 4. 登陆成功生成jsonwebtoken , 并将其返回；
 
 
-## Course 12 Adding User Login 
+## Grade 12 Adding User Login 
 
 > to make sure that users can login themselves in and get such a token . the token which we then to attach to futrue requests which reach our protected routes in our sever .
 
@@ -786,7 +786,7 @@ There are different things here.
 
 Returning a promise - I don't think we would want to do that. If we accept callbacks anyone can wrap that in a promise, either using new Promise(function(...){} or something like bluebird's promisifyAll. We like promises (and use them a lot internally) but we don't think it is a good idea to expose them in APIs when they can be so easily wrapped. Some libs also both return a promise and a callback, but that leads to being tied to an implementation of promises which is not always desired.
 Separating into sync/async functions - Crypto functions in jws are not async, so as it was mentioned streaming could be used but it does not make a lot of sense based on the payloads.
-CPU intensive async calls (crypto) make use of libuv's event loop to simulate asynchrony (they are of course working in another thread). We don't have the option to simulate that here. The best choice would probably be to get rid of the callbacks.
+CPU intensive async calls (crypto) make use of libuv's event loop to simulate asynchrony (they are of Grade working in another thread). We don't have the option to simulate that here. The best choice would probably be to get rid of the callbacks.
 
 As of now it makes no sense to do so. Once we update to another major we can probably make this change.
 
@@ -831,7 +831,7 @@ As of now it makes no sense to do so. Once we update to another major we can pro
 
 ```
 
-## Course 13 JWT Route Protection 主要通过自定义中间件的方式实现的
+## Grade 13 JWT Route Protection 主要通过自定义中间件的方式实现的
 
 > we need some way of protecting routes , a good approach would be to add some kind of middleware which we can easily add to a given route that runs prior to that route getting processed , to acturally determine does it make sense to continue . so we need some middleware that checks a valid token to be there and only if the token is there and valid can be verified. on if that we continue  for this we'll create a new folder --- middleware 
 
@@ -936,7 +936,7 @@ const token = req.headers.authorization.splict(' ')[1];
 
 ```
 
-## Course 14 Adding Controllers
+## Grade 14 Adding Controllers
 
 > 将路由的处理逻辑，单独拿出来，放到controller 文件夹中
 
