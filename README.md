@@ -554,6 +554,15 @@ app.use('/uploads',express.static('uploads'));
 
 > bcrypt 的安装并不是仅仅通过一句 npm install -s bcrypt 就可以完成的，参阅一下官方的安装教程：https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions#microsoft-windows 
 
+```bash
+# 安装系统的依赖（需要管理员权限运行cmd）
+npm install --global --production windows-build-tools
+
+# 安装bcrpt
+npm i -s bcrpt@2.0.0 
+
+```
+
 > 安装好依赖之后，记得去重启一下系统；
 
 * 存储用户的过程中，应该做一下判别，是否数据库中已经存在相同的用户名 
