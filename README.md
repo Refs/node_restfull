@@ -76,7 +76,7 @@ nodemon server.js
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     /**
-     * here we can use nodemon which is a --save-dev package,because this will not search for our system but in our project and we just indtalled it 
+     * here we can use nodemon which is a --save-dev package,because this will not search for our system but in our project and we just installed it 
     */
     "start" "nodemon server.js"
   },
@@ -100,7 +100,7 @@ nodemon server.js
 
 >  it's a logging package for node.js we can use it really easy 
 
-> we tell Express to funnel all requests through the morgan middleware worgan then will log something and let the request continue 
+> we tell Express to funnel all requests through the morgan middleware , morgan then will log something and let the request continue 
 
 
 *  错误的处理方式： 见代码
@@ -183,15 +183,13 @@ MDN参考文档：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_contr
 
 > as the default the browser is saying it doesn't make sense(明智的) for you to get something from that server which is not the server you html page coming from . that is a security concept , but for restfull api , we want allow this , because restfull api are meant to be consumed by by our clients by orservers and not just the server which is the api runs on   
 
-> we don't server an application from that api, we just server data, therefore we can overcome this we can disable this Cors mechanism by sending some headers `from server` to the client that essentially tell the browser which is running our client application which tell the client : "yeah! it is okay you can have access and then thw browser says "okay ! so here ylu go "
+> we don't server an application from that api, we just server data, therefore we can overcome this we can disable this Cors mechanism by sending some headers `from server` to the client that essentially tell the browser which is running our client application which tell the client : "yeah! it is okay you can have access and then the browser says "okay ! so here you go "
 
-> so waht we have to do now is we have to ensure that we send the right headers back and 
-
-> to append the headers to any response we sent back; we should do it before the request reach the routes , because routes will sent back a ronsponse. so before the toute we'll add another a middleware weith app.use() to funnel every request through it  
+> so what we have to do now is we have to ensure that we send the right headers back and to append the headers to any response we sent back; we should do it before the request reach the routes , because routes will sent back a ronsponse. so before the route we'll add another a middleware with app.use() to funnel every request through it  
 
 ```js
 app.use((req, res, next) => {
-  // here we want to add some headers to the response, this will not send the response, it will just adjust the response . wherever we do send a response it has these headers .
+  // here we want to add some headers to the response, this will not send the response, it will just adjust the response . wherever we do send a response it has these headers.
 
   // the second parameter :  the value can be start to give access to any origin , you could also restrict it you could say only 'httpL//my-cool-page.com' should have access but typically for restfull api as you give access to any client, because you really want to narrow it down to one 
   // res.header('Access-Control-Allow-Origin', 'htpp://my-cool-page.com')
